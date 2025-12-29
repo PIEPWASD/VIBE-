@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE — Premium Streetwear</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ---------------- GLOBAL ---------------- */
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    font-family:'Montserrat',sans-serif;
+    background:#f5f0e6; /* beige theme */
+    color:#1a1a1a;
+    overflow-x:hidden;
+    scroll-behavior:smooth;
+}
+a{text-decoration:none;color:inherit;}
+
+/* ---------------- SPARKLE ---------------- */
+.sparkle{position:relative;transition:.3s;}
+.sparkle:hover{
+    color:#000;
+    text-shadow:0 0 12px rgba(0,0,0,.3);
+}
+.sparkle::after{
+    content:'';position:absolute;top:50%;left:50%;width:6px;height:6px;
+    background:#000;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(0);transition:.3s;
+}
+.sparkle:hover::after{
+    opacity:1;transform:translate(-50%,-50%) scale(3);box-shadow:0 0 25px #000;
+}
+
+/* ---------------- MOTTO BAR ---------------- */
+.motto-bar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,240,230,.95);
+    backdrop-filter:blur(14px);
+    padding:14px;text-align:center;
+    font-size:1.15rem;letter-spacing:2px;font-weight:600;color:#1a1a1a;
+}
+
+/* ---------------- HEADER ---------------- */
+header{
+    position:sticky;top:52px;z-index:40;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 60px;
+    background:rgba(245,240,230,.95);
+    backdrop-filter:blur(14px);
+}
+#logo{font-size:2.4rem;font-weight:900;letter-spacing:3px;color:#1a1a1a;}
+nav a{margin-left:30px;font-weight:500;color:#1a1a1a;}
+
+/* ---------------- HERO ---------------- */
+.hero{
+    height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(rgba(245,240,230,0.6),rgba(245,240,230,0.6)),url('hero-banner.jpg') center/cover no-repeat;
+    box-shadow:inset 0 0 100px rgba(0,0,0,0.1);
+}
+.hero h1{font-size:clamp(3rem,6vw,4.8rem);font-weight:900;line-height:1.1;}
+.hero p{font-size:1.25rem;color:#333;margin:30px 0 40px;}
+.hero-button{padding:16px 44px;border-radius:40px;background:#222;font-weight:700;transition:.3s;color:#fff;}
+.hero-button:hover{background:#fff;color:#000;}
+
+/* ---------------- PRODUCTS ---------------- */
+.products{padding:80px 10%;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:50px;}
+.product-card{
+    background:#fff;border-radius:18px;overflow:hidden;text-align:center;transition:.3s;position:relative;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 8px 30px rgba(0,0,0,.15);}
+.product-card img{width:100%;height:420px;object-fit:cover;border-bottom:1px solid rgba(0,0,0,0.05);}
+.product-card h3{margin:20px 0 10px;font-size:1.6rem;}
+.product-card p{padding:0 20px;color:#333;margin-bottom:15px;}
+
+/* ---------------- STOCK LABEL ---------------- */
+.stock-label{
+    position:absolute;top:15px;right:15px;
+    background:#ff9900;color:#fff;font-weight:700;
+    padding:6px 12px;border-radius:12px;font-size:0.9rem;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:10;
+    transition:.3s;
+}
+.stock-label.trending{background:#ff5050;}
+.stock-label.limited{background:#ff9900;}
+.stock-label.restocked{background:#4caf50;}
+
+/* ---------------- BUTTONS ---------------- */
+.btn-group a, .details-btn{
+    display:inline-block;margin:8px 10px 20px 0;
+    padding:12px 36px;border-radius:40px;background:#222;font-weight:700;transition:.3s;color:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.btn-group a:hover, .details-btn:hover{background:#fff;color:#000;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+
+/* ---------------- DETAILS PANEL ---------------- */
+.details{display:none;padding:25px 30px 40px;text-align:left;font-size:0.95rem;line-height:1.8;color:#333;}
+.details strong{color:#000;}
+.details .highlight{color:#ff9900;font-weight:800;}
+
+/* ---------------- INFO SECTIONS ---------------- */
+.section{padding:120px 14%;text-align:center;}
+.section h2{font-size:3rem;font-weight:900;margin-bottom:30px;}
+.section p{font-size:1.25rem;color:#333;line-height:1.9;}
+
+/* ---------------- BUBBLES ---------------- */
+#bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.bubble{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(0,0,0,.15); /* black translucent */
+    animation:rise linear infinite;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1); /* subtle shadow for depth */
+}
+@keyframes rise{from{transform:translateY(120vh)}to{transform:translateY(-150vh)}}
+
+/* ---------------- CHATBOT ---------------- */
+#chatbot{position:fixed;bottom:20px;right:20px;width:360px;max-width:90%;z-index:100;}
+#chat-header{background:#222;color:#fff;padding:14px 20px;border-radius:50px; font-weight:700; cursor:pointer; text-align:center;}
+#chat-body{background:#fff;height:360px;border-radius:12px;padding:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+#chat-messages{flex:1;overflow-y:auto;margin-bottom:8px;}
+.chat-message{padding:8px 12px;margin:4px 0;border-radius:12px;max-width:80%;word-wrap:break-word;}
+.user-msg{background:#222;color:#fff;align-self:flex-end;}
+.bot-msg{background:#f1f1f1;color:#000;align-self:flex-start;}
+#chat-input{display:flex;}
+#chat-input input{flex:1;padding:10px;border-radius:12px;border:1px solid #ccc;margin-right:8px;}
+#chat-input button{padding:10px 16px;border-radius:12px;background:#222;color:#fff;border:none;cursor:pointer;transition:.3s;}
+#chat-input button:hover{background:#ff9900;}
+</style>
+</head>
+
+<body>
+
+<div id="bubbles"></div>
+
+<div class="motto-bar sparkle">
+    Wear Your Attitude. Own Your VIBE.
+</div>
+
+<header>
+    <div id="logo" class="sparkle">VIBE</div>
+    <nav>
+        <a href="#products" class="sparkle">Clothing</a>
+        <a href="#about" class="sparkle">About</a>
+        <a href="#contact" class="sparkle">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div>
+        <h1 class="sparkle">Trendy & Comfortable Apparel</h1>
+        <p>Designed for everyday wear. Built for modern lifestyles.</p>
+        <a href="#contact" class="hero-button sparkle">Contact Us</a>
+    </div>
+</section>
+
+<section id="products" class="products">
+
+  <!-- UNISEX HOODIE -->
+  <div class="product-card">
+    <div class="stock-label trending">Trending</div>
+    <img src="black-hoodie.jpg" alt="Unisex Hoodie">
+    <h3 class="sparkle">Unisex Hoodie</h3>
+    <p>Everyday comfort with a clean silhouette. <span class="highlight">Fits both men and women</span></p>
+    <div class="btn-group">
+      <a href="#contact" class="sparkle">Contact Us</a>
+    </div>
+    <a class="details-btn sparkle" onclick="toggle(this)">Details</a>
+    <div class="details">
+      <strong>Fabric:</strong> Cotton-poly fleece blend<br>
+      <strong>Feel:</strong> Soft brushed interior, smooth outer finish<br>
+      <strong>Weight:</strong> Medium–heavy for daily wear<br>
+      <strong>Fit:</strong> Relaxed unisex fit with dropped shoulders<br>
+      <strong>Style:</strong> Modern silhouette for all genders<br>
+      <strong>Care:</strong> Cold wash, inside-out, air dry recommended
+    </div>
+  </div>
+
+  <!-- WOMEN'S TRENDY TOPS -->
+  <div class="product-card">
+    <div class="stock-label limited">Limited Stock</div>
+    <img src="women-top.jpg" alt="Women's Trendy Top">
+    <h3 class="sparkle">Women’s Trendy Top</h3>
+    <p>Lightweight and breathable, perfect for casual style. <span class="highlight">Designed for women</span></p>
+    <div class="btn-group">
+      <a href="#contact" class="sparkle">Contact Us</a>
+    </div>
+    <a class="details-btn sparkle" onclick="toggle(this)">Details</a>
+    <div class="details">
+      <strong>Fabric:</strong> Cotton blend jersey<br>
+      <strong>Feel:</strong> Smooth and breathable<br>
+      <strong>Fit:</strong> Tailored for women’s body shape<br>
+      <strong>Use:</strong> Casual outings, layering, summer wear<br>
+      <strong>Style:</strong> Clean neckline, minimal branding, versatile
+    </div>
+  </div>
+
+  <!-- UNISEX T-SHIRT -->
+  <div class="product-card">
+    <div class="stock-label restocked">Just Restocked</div>
+    <img src="unisex-tshirt.jpg" alt="Unisex T-Shirt">
+    <h3 class="sparkle">Unisex T-Shirt</h3>
+    <p>A classic wardrobe essential. <span class="highlight">Fits both men and women</span></p>
+    <div class="btn-group">
+      <a href="#contact" class="sparkle">Contact Us</a>
+    </div>
+    <a class="details-btn sparkle" onclick="toggle(this)">Details</a>
+    <div class="details">
+      <strong>Fabric:</strong> 100% Cotton or high-quality cotton-blend<br>
+      <strong>Feel:</strong> Soft, lightweight, breathable<br>
+      <strong>Fit:</strong> Relaxed unisex cut<br>
+      <strong>Use:</strong> Casual everyday wear, layering, all-season<br>
+      <strong>Care:</strong> Machine wash cold, air dry for best results
+    </div>
+  </div>
+
+</section>
+
+<section id="about" class="section">
+<h2 class="sparkle">About VIBE</h2>
+<p>
+VIBE focuses on versatile, stylish clothing that balances comfort and modern aesthetics.  
+Our products are curated for everyday wear, with attention to quality and style, catering to those who value effortless fashion and confidence.
+</p>
+</section>
+
+<section id="contact" class="section">
+<h2 class="sparkle">Contact Us</h2>
+<p>
+📧 support@vibeofficial.com<br>
+📸 Instagram: <a href="https://www.instagram.com/vibeofficial67" target="_blank"><strong>@vibeofficial67</strong></a>
+</p>
+</section>
+
+<!-- ---------------- AI CHATBOT ---------------- -->
+<div id="chatbot">
+  <div id="chat-header" onclick="toggleChat()">Hi! I’m VIBE AI, how can I help you today?</div>
+  <div id="chat-body">
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+      <input type="text" id="user-input" placeholder="Type your question...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- DETAILS TOGGLE ---------------- */
+function toggle(btn){
+    const d = btn.nextElementSibling;
+    d.style.display = d.style.display === "block" ? "none" : "block";
+}
+
+/* ---------------- BUBBLES ---------------- */
+const bubbleBox=document.getElementById('bubbles');
+for(let i=0;i<90;i++){
+    const b=document.createElement('div');
+    b.className='bubble';
+    const s=Math.random()*80+20;
+    b.style.width=s+'px';b.style.height=s+'px';
+    b.style.left=Math.random()*100+'vw';
+    b.style.animationDuration=(Math.random()*40+40)+'s';
+    b.style.animationDelay=(-Math.random()*60)+'s';
+    bubbleBox.appendChild(b);
+}
+
+/* ---------------- CHATBOT ---------------- */
+let chatOpen = true;
+function toggleChat(){
+    const body = document.getElementById('chat-body');
+    chatOpen = !chatOpen;
+    body.style.display = chatOpen ? 'flex' : 'none';
+}
+
+async function sendMessage(){
+    const input = document.getElementById('user-input');
+    const msg = input.value.trim();
+    if(!msg) return;
+    addMessage(msg,'user-msg');
+    input.value='';
+    try{
+        const res = await fetch('https://api.openai.com/v1/chat/completions',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer YOUR_OPENAI_API_KEY'
+            },
+            body:JSON.stringify({
+                model:'gpt-3.5-turbo',
+                messages:[{role:'user', content:msg}],
+                temperature:0.7
+            })
+        });
+        const data = await res.json();
+        addMessage(data.choices[0].message.content,'bot-msg');
+    }catch(err){
+        addMessage('Sorry, something went wrong.','bot-msg');
+    }
+}
+
+function addMessage(text,className){
+    const messages = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className='chat-message '+className;
+    div.textContent=text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+</script>
+
+</body>
+</html>
